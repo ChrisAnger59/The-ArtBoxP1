@@ -1,20 +1,21 @@
 <?php 
 
+// Intègre header.php (une seule fois) - affichage de l'en-tête
+// Intègre oeuvres.php - charge le tableau $oeuvres
 include_once 'header.php';
-include './oeuvres.php';
+include 'oeuvres.php';
 
-// Si $_GET['id'] n'existe pas ou est null (false)
-// On redirige vers index.php
+// Si 'id' n'est pas présent dans l'URL
+// On redirige vers index.php et stoppe le script
 if(!isset($_GET['id'])){
     header('location: index.php');
     exit();
 }
 
-// L'id de l'URL est stocké dans la variable $id en string par défaut
-// la fonction "intval()" retourne la valeur numerique de la variable $_GET['id']
+// Récupère l'id de l'URL et le convertit en entier
 $id = intval($_GET['id']);
 
-// Variable NULL qu'on utilisera plus tard
+// Contiendra l'oeuvre trouvée, ou restera NULL si aucune correspondance
 $oeuvre_detail = null;
 
 // Pour chaques sous-tableaux du tableau $oeuvres
@@ -28,12 +29,14 @@ foreach($oeuvres as $oeuvre){
 }
 
 // Si $oeuvre_detail est restée NULL 
-// On renvoit vers index.php
+// On renvoit vers index.php et stoppe le script
 if($oeuvre_detail === null){
     header('location: index.php');
+    exit;
 }
 
 ?>
+
 <article id="detail-oeuvre">
         <div id="img-oeuvre">
             <img src="<?= $oeuvre_detail['image'] ?>" alt="<?= $oeuvre_detail['titre'] ?>">
@@ -48,6 +51,7 @@ if($oeuvre_detail === null){
     </article>
 <?php
 
+// Intègre footer.php (une seule fois) - affichage du pied de page
 include_once 'footer.php';
 
 ?>
